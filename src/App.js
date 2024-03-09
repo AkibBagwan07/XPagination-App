@@ -1,25 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import { useEffect, useState } from "react";
+import "./styles.css";
+import axios from "axios";
+import Pagination from "./Pagination";
+export default function App() {
+  let api =
+    "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json";
+  let [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(10);
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  useEffect(() => {
+    (async function () {
+      try {
+        let res = await axios.get(api);
+        setData(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const currentRecords = data.slice(indexOfFirstRecord, indexOfLastRecord);
+  const nPages = Math.ceil(data.length / recordsPerPage);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Employee Data Table</h1>
+      <table>
+        <thead>
+          <tr className="main-col">
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+          </tr>
+          {currentRecords.map((person) => {
+            return (
+              <tr>
+                <th>{person.id}</th>
+                <th>{person.name}</th>
+                <th>{person.email}</th>
+                <th>{person.role}</th>
+              </tr>
+            );
+          })}
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <Pagination
+        nPages={nPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </div>
   );
 }
-
-export default App;
