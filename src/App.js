@@ -17,7 +17,7 @@ export default function App() {
         setData(res.data);
         console.log(res.data);
       } catch (error) {
-        console.log(alert(error));
+        console.log(alert("failed to fetch data"));
       }
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
