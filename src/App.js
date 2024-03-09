@@ -17,7 +17,7 @@ export default function App() {
         setData(res.data);
         console.log(res.data);
       } catch (error) {
-        console.log(error);
+        console.log(alert(error));
       }
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,7 +35,9 @@ export default function App() {
             <th>Email</th>
             <th>Role</th>
           </tr>
-          {currentRecords.map((person) => {
+        </thead>
+        <tbody id="tableBody">
+        {currentRecords.map((person) => {
             return (
               <tr>
                 <th>{person.id}</th>
@@ -45,8 +47,7 @@ export default function App() {
               </tr>
             );
           })}
-        </thead>
-        <tbody id="tableBody"></tbody>
+        </tbody>
       </table>
       <Pagination
         nPages={nPages}
